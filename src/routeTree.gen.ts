@@ -9,38 +9,159 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
+import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
+import { Route as AuthenticatedEtudiantsRouteImport } from './routes/_authenticated/etudiants'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEtudiantsIdRouteImport } from './routes/_authenticated/etudiants.$id'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTrombinoscopeRoute =
+  AuthenticatedTrombinoscopeRouteImport.update({
+    id: '/trombinoscope',
+    path: '/trombinoscope',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedEtudiantsRoute = AuthenticatedEtudiantsRouteImport.update({
+  id: '/etudiants',
+  path: '/etudiants',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedEtudiantsIdRoute =
+  AuthenticatedEtudiantsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedEtudiantsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
+  '/parametres': typeof AuthenticatedParametresRoute
+  '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
+  '/parametres': typeof AuthenticatedParametresRoute
+  '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
+  '/_authenticated/parametres': typeof AuthenticatedParametresRoute
+  '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/_authenticated/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/reset-password'
+    | '/dashboard'
+    | '/etudiants'
+    | '/parametres'
+    | '/trombinoscope'
+    | '/etudiants/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/reset-password'
+    | '/dashboard'
+    | '/etudiants'
+    | '/parametres'
+    | '/trombinoscope'
+    | '/etudiants/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/reset-password'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/etudiants'
+    | '/_authenticated/parametres'
+    | '/_authenticated/trombinoscope'
+    | '/_authenticated/etudiants/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +169,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/trombinoscope': {
+      id: '/_authenticated/trombinoscope'
+      path: '/trombinoscope'
+      fullPath: '/trombinoscope'
+      preLoaderRoute: typeof AuthenticatedTrombinoscopeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/parametres': {
+      id: '/_authenticated/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof AuthenticatedParametresRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/etudiants': {
+      id: '/_authenticated/etudiants'
+      path: '/etudiants'
+      fullPath: '/etudiants'
+      preLoaderRoute: typeof AuthenticatedEtudiantsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/etudiants/$id': {
+      id: '/_authenticated/etudiants/$id'
+      path: '/$id'
+      fullPath: '/etudiants/$id'
+      preLoaderRoute: typeof AuthenticatedEtudiantsIdRouteImport
+      parentRoute: typeof AuthenticatedEtudiantsRoute
+    }
   }
 }
 
+interface AuthenticatedEtudiantsRouteChildren {
+  AuthenticatedEtudiantsIdRoute: typeof AuthenticatedEtudiantsIdRoute
+}
+
+const AuthenticatedEtudiantsRouteChildren: AuthenticatedEtudiantsRouteChildren =
+  {
+    AuthenticatedEtudiantsIdRoute: AuthenticatedEtudiantsIdRoute,
+  }
+
+const AuthenticatedEtudiantsRouteWithChildren =
+  AuthenticatedEtudiantsRoute._addFileChildren(
+    AuthenticatedEtudiantsRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEtudiantsRoute: typeof AuthenticatedEtudiantsRouteWithChildren
+  AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
+  AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEtudiantsRoute: AuthenticatedEtudiantsRouteWithChildren,
+  AuthenticatedParametresRoute: AuthenticatedParametresRoute,
+  AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
