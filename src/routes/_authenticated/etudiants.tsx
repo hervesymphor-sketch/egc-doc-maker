@@ -44,6 +44,27 @@ function StudentsPage() {
     return list;
   }, [students.data, promo, query]);
 
+  const handleBulkCertificats = async () => {
+    if (!settings.data?.settings || filtered.length === 0) return;
+    setBulk({ active: true, done: 0, total: filtered.length });
+    // Wait next tick so hidden refs render
+    await new Promise((r) => setTimeout(r, 50));
+    try {
+      const root = bulkRef.current;
+      if (!root) throw new Error("Aperçu indisponible");
+      const els = Array.from(root.querySelectorAll<HTMLElement>("[data-cert]"));
+      const filename = `certificats_scolarite_${promo === "all" ? "tous" : "promo" + promo}.pdf`;
+      await exportElementsToPdf(els, filename, (done, total) =>
+        setBulk({ active: true, done, total }),
+      );
+      toast.success(`${filtered.length} certificat${filtered.length > 1 ? "s" : ""} généré${filtered.length > 1 ? "s" : ""}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erreur de génération");
+    } finally {
+      setBulk({ active: false, done: 0, total: 0 });
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-end justify-between gap-4 flex-wrap">
@@ -53,10 +74,29 @@ function StudentsPage() {
             {filtered.length} étudiant{filtered.length > 1 ? "s" : ""}
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => students.refetch()} disabled={students.isFetching}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${students.isFetching ? "animate-spin" : ""}`} />
-          Synchroniser
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            onClick={handleBulkCertificats}
+            disabled={bulk.active || filtered.length === 0 || !settings.data?.settings}
+          >
+            {bulk.active ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {bulk.done}/{bulk.total}
+              </>
+            ) : (
+              <>
+                <Award className="w-4 h-4 mr-2" />
+                Générer les certificats ({filtered.length})
+              </>
+            )}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => students.refetch()} disabled={students.isFetching}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${students.isFetching ? "animate-spin" : ""}`} />
+            Synchroniser
+          </Button>
+        </div>
       </div>
 
       <div className="flex gap-3 flex-wrap items-center">
