@@ -57,6 +57,10 @@ export function CertificatScolarite({ student, settings }: Props) {
         Le présent certificat lui est délivré pour servir et valoir ce que de droit.
       </p>
       <DocFooter settings={settings} />
+      <div className="mt-8 pt-4 border-t text-center text-xs text-gray-600" style={{ borderColor: "#6B21A8" }}>
+        <div>{settings.address} {settings.postal_code} {settings.city}</div>
+        <div>Tél.: 0596649841</div>
+      </div>
     </div>
   );
 }
