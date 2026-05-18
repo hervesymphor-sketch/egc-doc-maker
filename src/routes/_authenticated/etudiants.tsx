@@ -78,8 +78,8 @@ function StudentsPage() {
               <TableHead>Nom</TableHead>
               <TableHead>Prénom</TableHead>
               <TableHead>Promo</TableHead>
-              <TableHead className="hidden md:table-cell">Email</TableHead>
-              <TableHead className="hidden lg:table-cell">Ville</TableHead>
+              <TableHead className="hidden md:table-cell">N° étudiant</TableHead>
+              <TableHead className="hidden lg:table-cell">Groupe</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -100,8 +100,8 @@ function StudentsPage() {
                   <TableCell className="font-medium">{s.nom}</TableCell>
                   <TableCell>{s.prenom}</TableCell>
                   <TableCell><Badge variant="secondary">Promo {s.promotion}</Badge></TableCell>
-                  <TableCell className="hidden md:table-cell text-muted-foreground">{s.email}</TableCell>
-                  <TableCell className="hidden lg:table-cell text-muted-foreground">{s.ville}</TableCell>
+                  <TableCell className="hidden md:table-cell text-muted-foreground">{s.numEtudiant}</TableCell>
+                  <TableCell className="hidden lg:table-cell text-muted-foreground">{s.groupe}</TableCell>
                   <TableCell className="text-right">
                     <Button asChild size="sm" variant="ghost">
                       <Link to="/etudiants/$id" params={{ id: s.id }}>Ouvrir</Link>
