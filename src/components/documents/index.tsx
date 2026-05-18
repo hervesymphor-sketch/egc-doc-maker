@@ -1,4 +1,5 @@
 import type { Student, SchoolSettings } from "@/lib/types";
+import logoEgc from "@/assets/logo-egc.png";
 
 interface Props {
   student: Student;
@@ -6,18 +7,12 @@ interface Props {
 }
 
 function DocHeader({ settings }: { settings: SchoolSettings }) {
+  const logo = settings.logo_url || logoEgc;
   return (
     <div className="flex items-start justify-between border-b-2 pb-4 mb-8" style={{ borderColor: "#6B21A8" }}>
-      <div className="flex items-center gap-3">
-        {settings.logo_url ? (
-          <img src={settings.logo_url} alt="" className="w-16 h-16 object-contain" crossOrigin="anonymous" />
-        ) : (
-          <div className="w-16 h-16 rounded-lg flex items-center justify-center text-2xl font-bold text-white" style={{ background: "#6B21A8" }}>
-            EGC
-          </div>
-        )}
+      <div className="flex items-center gap-4">
+        <img src={logo} alt="EGC Business School" className="h-20 object-contain" crossOrigin="anonymous" />
         <div>
-          <div className="text-xl font-bold" style={{ color: "#6B21A8" }}>{settings.name}</div>
           <div className="text-xs text-gray-600">{settings.address} {settings.postal_code} {settings.city}</div>
           {settings.rne && <div className="text-xs text-gray-600">RNE : {settings.rne}</div>}
         </div>
@@ -108,9 +103,9 @@ export function CarteEtudiant({ student, settings }: Props) {
           </div>
         )}
         <div className="flex-1 flex flex-col justify-between">
-          <div>
-            <div className="text-[8px] uppercase tracking-wider opacity-70">{settings.name}</div>
-            <div className="text-[7px] opacity-60">Carte étudiant</div>
+          <div className="flex items-center justify-between">
+            <img src={settings.logo_url || logoEgc} alt="" className="h-5 object-contain brightness-0 invert" crossOrigin="anonymous" />
+            <div className="text-[7px] opacity-70">Carte étudiant</div>
           </div>
           <div>
             <div className="text-xs font-semibold leading-tight">{student.prenom}</div>
