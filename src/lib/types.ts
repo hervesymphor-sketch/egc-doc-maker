@@ -3,17 +3,17 @@ export type Promotion = "1" | "2" | "3";
 export interface Student {
   id: string; // synthesized from promotion + row index
   promotion: Promotion;
-  nom: string;
   prenom: string;
+  nom: string;
   dateNaissance: string;
   lieuNaissance: string;
-  sexe: string;
+  ine: string;
+  numIdentification: string;
+  numEtudiant: string;
   adresse: string;
-  ville: string;
-  codePostal: string;
-  email: string;
-  telephone: string;
+  groupe: string;
   photo: string;
+  anneeUniversitaire: string;
 }
 
 export interface SchoolSettings {

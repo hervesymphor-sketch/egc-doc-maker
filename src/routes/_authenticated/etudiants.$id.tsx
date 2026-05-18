@@ -82,7 +82,8 @@ function StudentDetail() {
               <CardTitle className="font-serif text-3xl">{student.prenom} {student.nom}</CardTitle>
               <div className="flex gap-2 mt-2 flex-wrap">
                 <Badge variant="secondary">Promotion {student.promotion}</Badge>
-                {student.email && <Badge variant="outline">{student.email}</Badge>}
+                {student.groupe && <Badge variant="outline">Groupe {student.groupe}</Badge>}
+                {student.numEtudiant && <Badge variant="outline">N° {student.numEtudiant}</Badge>}
               </div>
             </div>
           </div>
@@ -90,10 +91,10 @@ function StudentDetail() {
         <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
           <Info label="Date de naissance" value={student.dateNaissance} />
           <Info label="Lieu de naissance" value={student.lieuNaissance} />
-          <Info label="Sexe" value={student.sexe} />
+          <Info label="N° INE" value={student.ine} />
+          <Info label="N° Identification" value={student.numIdentification} />
           <Info label="Adresse" value={student.adresse} />
-          <Info label="Ville" value={`${student.codePostal} ${student.ville}`} />
-          <Info label="Téléphone" value={student.telephone} />
+          <Info label="Année universitaire" value={student.anneeUniversitaire} />
         </CardContent>
       </Card>
 
