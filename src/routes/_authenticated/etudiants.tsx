@@ -29,7 +29,7 @@ function StudentsPage() {
         (s) =>
           s.nom.toLowerCase().includes(q) ||
           s.prenom.toLowerCase().includes(q) ||
-          s.email.toLowerCase().includes(q),
+          s.numEtudiant.toLowerCase().includes(q),
       );
     }
     return list;
