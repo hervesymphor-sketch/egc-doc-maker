@@ -6,6 +6,7 @@ import {
   Image as ImageIcon,
   ClipboardList,
   CreditCard,
+  FileText,
   Tag,
   UserCog,
   Settings,
