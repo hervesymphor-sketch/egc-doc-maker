@@ -5,6 +5,7 @@ import {
   GraduationCap,
   Image as ImageIcon,
   ClipboardList,
+  CreditCard,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const items = [
   { title: "Étudiants", url: "/etudiants", icon: Users },
   { title: "Trombinoscope", url: "/trombinoscope", icon: ImageIcon },
   { title: "Émargement", url: "/emargement", icon: ClipboardList },
+  { title: "Cartes étudiants", url: "/cartes", icon: CreditCard },
   { title: "Paramètres", url: "/parametres", icon: Settings },
 ];
 

@@ -17,6 +17,7 @@ import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authen
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedEmargementRouteImport } from './routes/_authenticated/emargement'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCartesRouteImport } from './routes/_authenticated/cartes'
 import { Route as AuthenticatedEtudiantsIndexRouteImport } from './routes/_authenticated/etudiants.index'
 import { Route as AuthenticatedEtudiantsIdRouteImport } from './routes/_authenticated/etudiants.$id'
 
@@ -60,6 +61,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCartesRoute = AuthenticatedCartesRouteImport.update({
+  id: '/cartes',
+  path: '/cartes',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedEtudiantsIndexRoute =
   AuthenticatedEtudiantsIndexRouteImport.update({
     id: '/etudiants/',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/cartes': typeof AuthenticatedCartesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
   '/parametres': typeof AuthenticatedParametresRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/cartes': typeof AuthenticatedCartesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
   '/parametres': typeof AuthenticatedParametresRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/cartes': typeof AuthenticatedCartesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/emargement': typeof AuthenticatedEmargementRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/reset-password'
+    | '/cartes'
     | '/dashboard'
     | '/emargement'
     | '/parametres'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/reset-password'
+    | '/cartes'
     | '/dashboard'
     | '/emargement'
     | '/parametres'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/reset-password'
+    | '/_authenticated/cartes'
     | '/_authenticated/dashboard'
     | '/_authenticated/emargement'
     | '/_authenticated/parametres'
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/cartes': {
+      id: '/_authenticated/cartes'
+      path: '/cartes'
+      fullPath: '/cartes'
+      preLoaderRoute: typeof AuthenticatedCartesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/etudiants/': {
       id: '/_authenticated/etudiants/'
       path: '/etudiants'
@@ -227,6 +246,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCartesRoute: typeof AuthenticatedCartesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmargementRoute: typeof AuthenticatedEmargementRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
@@ -237,6 +257,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCartesRoute: AuthenticatedCartesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmargementRoute: AuthenticatedEmargementRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
@@ -258,3 +279,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
