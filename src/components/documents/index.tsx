@@ -6,16 +6,18 @@ interface Props {
   settings: SchoolSettings;
 }
 
-function DocHeader({ settings }: { settings: SchoolSettings }) {
+function DocHeader({ settings, showAddress = true }: { settings: SchoolSettings; showAddress?: boolean }) {
   const logo = settings.logo_url || logoEgc;
   return (
     <div className="flex items-start justify-between border-b-2 pb-4 mb-8" style={{ borderColor: "#6B21A8" }}>
       <div className="flex items-center gap-4">
         <img src={logo} alt="EGC Business School" className="h-20 object-contain" crossOrigin="anonymous" />
-        <div>
-          <div className="text-xs text-gray-600">{settings.address} {settings.postal_code} {settings.city}</div>
-          {settings.rne && <div className="text-xs text-gray-600">RNE : {settings.rne}</div>}
-        </div>
+        {showAddress && (
+          <div>
+            <div className="text-xs text-gray-600">{settings.address} {settings.postal_code} {settings.city}</div>
+            {settings.rne && <div className="text-xs text-gray-600">RNE : {settings.rne}</div>}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -38,7 +40,7 @@ function DocFooter({ settings }: { settings: SchoolSettings }) {
 export function CertificatScolarite({ student, settings }: Props) {
   return (
     <div className="doc-a4">
-      <DocHeader settings={settings} />
+      <DocHeader settings={settings} showAddress={false} />
       <h1 className="text-3xl text-center font-bold mb-2" style={{ color: "#6B21A8" }}>
         CERTIFICAT DE SCOLARITÉ
       </h1>
