@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<"signin" | "reset">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -34,6 +34,15 @@ function LoginPage() {
         if (error) throw error;
         toast.success("Connexion réussie");
         navigate({ to: "/dashboard" });
+      } else if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+        });
+        if (error) throw error;
+        toast.success("Compte créé ! Vérifiez votre email pour confirmer.");
+        setMode("signin");
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/reset-password`,
@@ -60,6 +69,8 @@ function LoginPage() {
           <CardDescription>
             {mode === "signin"
               ? "École de Gestion et de Commerce — Martinique"
+              : mode === "signup"
+              ? "Créer un nouveau compte"
               : "Réinitialiser votre mot de passe"}
           </CardDescription>
         </CardHeader>
@@ -76,7 +87,7 @@ function LoginPage() {
                 autoComplete="email"
               />
             </div>
-            {mode === "signin" && (
+            {mode !== "reset" && (
               <div className="space-y-2">
                 <Label htmlFor="password">Mot de passe</Label>
                 <Input
@@ -85,7 +96,8 @@ function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  autoComplete="current-password"
+                  minLength={6}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 />
               </div>
             )}
@@ -94,15 +106,39 @@ function LoginPage() {
                 ? "Chargement…"
                 : mode === "signin"
                 ? "Se connecter"
+                : mode === "signup"
+                ? "Créer le compte"
                 : "Envoyer le lien"}
             </Button>
-            <button
-              type="button"
-              onClick={() => setMode(mode === "signin" ? "reset" : "signin")}
-              className="text-sm text-muted-foreground hover:text-primary block w-full text-center"
-            >
-              {mode === "signin" ? "Mot de passe oublié ?" : "Retour à la connexion"}
-            </button>
+            <div className="flex flex-col gap-1 pt-2">
+              {mode === "signin" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setMode("signup")}
+                    className="text-sm text-muted-foreground hover:text-primary block w-full text-center"
+                  >
+                    Pas encore de compte ? S'inscrire
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("reset")}
+                    className="text-sm text-muted-foreground hover:text-primary block w-full text-center"
+                  >
+                    Mot de passe oublié ?
+                  </button>
+                </>
+              )}
+              {mode !== "signin" && (
+                <button
+                  type="button"
+                  onClick={() => setMode("signin")}
+                  className="text-sm text-muted-foreground hover:text-primary block w-full text-center"
+                >
+                  Retour à la connexion
+                </button>
+              )}
+            </div>
           </form>
         </CardContent>
       </Card>
