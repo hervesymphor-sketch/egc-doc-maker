@@ -7,8 +7,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Search, RefreshCw } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, RefreshCw, Award, Loader2 } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { CertificatScolarite } from "@/components/documents";
+import { exportElementsToPdf } from "@/lib/pdf";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/etudiants")({
   component: StudentsPage,
