@@ -15,8 +15,8 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
-import { Route as AuthenticatedEtudiantsRouteImport } from './routes/_authenticated/etudiants'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEtudiantsIndexRouteImport } from './routes/_authenticated/etudiants.index'
 import { Route as AuthenticatedEtudiantsIdRouteImport } from './routes/_authenticated/etudiants.$id'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -49,21 +49,22 @@ const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
   path: '/parametres',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedEtudiantsRoute = AuthenticatedEtudiantsRouteImport.update({
-  id: '/etudiants',
-  path: '/etudiants',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedEtudiantsIndexRoute =
+  AuthenticatedEtudiantsIndexRouteImport.update({
+    id: '/etudiants/',
+    path: '/etudiants/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedEtudiantsIdRoute =
   AuthenticatedEtudiantsIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedEtudiantsRoute,
+    id: '/etudiants/$id',
+    path: '/etudiants/$id',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -71,20 +72,20 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
+  '/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/': typeof AuthenticatedIndexRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
+  '/etudiants': typeof AuthenticatedEtudiantsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -92,11 +93,11 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
+  '/_authenticated/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,31 +106,31 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/dashboard'
-    | '/etudiants'
     | '/parametres'
     | '/trombinoscope'
     | '/etudiants/$id'
+    | '/etudiants/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/reset-password'
     | '/dashboard'
-    | '/etudiants'
     | '/parametres'
     | '/trombinoscope'
     | '/'
     | '/etudiants/$id'
+    | '/etudiants'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
     | '/reset-password'
     | '/_authenticated/dashboard'
-    | '/_authenticated/etudiants'
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
     | '/_authenticated/'
     | '/_authenticated/etudiants/$id'
+    | '/_authenticated/etudiants/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,13 +183,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParametresRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/etudiants': {
-      id: '/_authenticated/etudiants'
-      path: '/etudiants'
-      fullPath: '/etudiants'
-      preLoaderRoute: typeof AuthenticatedEtudiantsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -196,44 +190,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/etudiants/': {
+      id: '/_authenticated/etudiants/'
+      path: '/etudiants'
+      fullPath: '/etudiants/'
+      preLoaderRoute: typeof AuthenticatedEtudiantsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/etudiants/$id': {
       id: '/_authenticated/etudiants/$id'
-      path: '/$id'
+      path: '/etudiants/$id'
       fullPath: '/etudiants/$id'
       preLoaderRoute: typeof AuthenticatedEtudiantsIdRouteImport
-      parentRoute: typeof AuthenticatedEtudiantsRoute
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface AuthenticatedEtudiantsRouteChildren {
-  AuthenticatedEtudiantsIdRoute: typeof AuthenticatedEtudiantsIdRoute
-}
-
-const AuthenticatedEtudiantsRouteChildren: AuthenticatedEtudiantsRouteChildren =
-  {
-    AuthenticatedEtudiantsIdRoute: AuthenticatedEtudiantsIdRoute,
-  }
-
-const AuthenticatedEtudiantsRouteWithChildren =
-  AuthenticatedEtudiantsRoute._addFileChildren(
-    AuthenticatedEtudiantsRouteChildren,
-  )
-
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedEtudiantsRoute: typeof AuthenticatedEtudiantsRouteWithChildren
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedEtudiantsIdRoute: typeof AuthenticatedEtudiantsIdRoute
+  AuthenticatedEtudiantsIndexRoute: typeof AuthenticatedEtudiantsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedEtudiantsRoute: AuthenticatedEtudiantsRouteWithChildren,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedEtudiantsIdRoute: AuthenticatedEtudiantsIdRoute,
+  AuthenticatedEtudiantsIndexRoute: AuthenticatedEtudiantsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -248,3 +237,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
