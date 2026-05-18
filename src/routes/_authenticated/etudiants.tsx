@@ -7,8 +7,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Search, RefreshCw } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, RefreshCw, Award, Loader2 } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { CertificatScolarite } from "@/components/documents";
+import { exportElementsToPdf } from "@/lib/pdf";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/etudiants")({
   component: StudentsPage,
@@ -19,6 +22,12 @@ function StudentsPage() {
   const students = useStudents(settings.data?.settings?.google_sheet_id);
   const [promo, setPromo] = useState<"all" | "1" | "2" | "3">("all");
   const [query, setQuery] = useState("");
+  const bulkRef = useRef<HTMLDivElement>(null);
+  const [bulk, setBulk] = useState<{ active: boolean; done: number; total: number }>({
+    active: false,
+    done: 0,
+    total: 0,
+  });
 
   const filtered = useMemo(() => {
     let list = students.data?.students ?? [];
@@ -35,6 +44,27 @@ function StudentsPage() {
     return list;
   }, [students.data, promo, query]);
 
+  const handleBulkCertificats = async () => {
+    if (!settings.data?.settings || filtered.length === 0) return;
+    setBulk({ active: true, done: 0, total: filtered.length });
+    // Wait next tick so hidden refs render
+    await new Promise((r) => setTimeout(r, 50));
+    try {
+      const root = bulkRef.current;
+      if (!root) throw new Error("Aperçu indisponible");
+      const els = Array.from(root.querySelectorAll<HTMLElement>("[data-cert]"));
+      const filename = `certificats_scolarite_${promo === "all" ? "tous" : "promo" + promo}.pdf`;
+      await exportElementsToPdf(els, filename, (done, total) =>
+        setBulk({ active: true, done, total }),
+      );
+      toast.success(`${filtered.length} certificat${filtered.length > 1 ? "s" : ""} généré${filtered.length > 1 ? "s" : ""}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erreur de génération");
+    } finally {
+      setBulk({ active: false, done: 0, total: 0 });
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-end justify-between gap-4 flex-wrap">
@@ -44,10 +74,29 @@ function StudentsPage() {
             {filtered.length} étudiant{filtered.length > 1 ? "s" : ""}
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => students.refetch()} disabled={students.isFetching}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${students.isFetching ? "animate-spin" : ""}`} />
-          Synchroniser
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            onClick={handleBulkCertificats}
+            disabled={bulk.active || filtered.length === 0 || !settings.data?.settings}
+          >
+            {bulk.active ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {bulk.done}/{bulk.total}
+              </>
+            ) : (
+              <>
+                <Award className="w-4 h-4 mr-2" />
+                Générer les certificats ({filtered.length})
+              </>
+            )}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => students.refetch()} disabled={students.isFetching}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${students.isFetching ? "animate-spin" : ""}`} />
+            Synchroniser
+          </Button>
+        </div>
       </div>
 
       <div className="flex gap-3 flex-wrap items-center">
@@ -113,6 +162,21 @@ function StudentsPage() {
           </TableBody>
         </Table>
       </Card>
+
+      {/* Off-screen render for bulk PDF generation */}
+      {bulk.active && settings.data?.settings && (
+        <div
+          ref={bulkRef}
+          style={{ position: "fixed", left: "-10000px", top: 0, zIndex: -1 }}
+          aria-hidden
+        >
+          {filtered.map((s) => (
+            <div key={s.id} data-cert>
+              <CertificatScolarite student={s} settings={settings.data!.settings!} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
