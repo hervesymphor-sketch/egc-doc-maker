@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      school_settings: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          google_sheet_id: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          postal_code: string | null
+          rne: string | null
+          signatory_name: string | null
+          signatory_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          google_sheet_id?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          postal_code?: string | null
+          rne?: string | null
+          signatory_name?: string | null
+          signatory_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          google_sheet_id?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          postal_code?: string | null
+          rne?: string | null
+          signatory_name?: string | null
+          signatory_title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
