@@ -11,7 +11,7 @@ export function useSchoolSettings() {
   });
 }
 
-export function useStudents(spreadsheetId: string | undefined) {
+export function useStudents(spreadsheetId: string | null | undefined) {
   const fn = useServerFn(getStudents);
   return useQuery({
     queryKey: ["students", spreadsheetId],
