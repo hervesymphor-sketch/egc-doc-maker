@@ -13,7 +13,7 @@ import { CertificatScolarite } from "@/components/documents";
 import { exportElementsToPdf } from "@/lib/pdf";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/etudiants")({
+export const Route = createFileRoute("/_authenticated/etudiants/")({
   component: StudentsPage,
 });
 
