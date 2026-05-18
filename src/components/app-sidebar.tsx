@@ -6,6 +6,7 @@ import {
   Image as ImageIcon,
   ClipboardList,
   CreditCard,
+  Tag,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -29,6 +30,7 @@ const items = [
   { title: "Trombinoscope", url: "/trombinoscope", icon: ImageIcon },
   { title: "Émargement", url: "/emargement", icon: ClipboardList },
   { title: "Cartes étudiants", url: "/cartes", icon: CreditCard },
+  { title: "Étiquettes examen", url: "/etiquettes", icon: Tag },
   { title: "Paramètres", url: "/parametres", icon: Settings },
 ];
 

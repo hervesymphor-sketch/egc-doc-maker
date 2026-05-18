@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
+import { Route as AuthenticatedEtiquettesRouteImport } from './routes/_authenticated/etiquettes'
 import { Route as AuthenticatedEmargementRouteImport } from './routes/_authenticated/emargement'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCartesRouteImport } from './routes/_authenticated/cartes'
@@ -49,6 +50,11 @@ const AuthenticatedTrombinoscopeRoute =
 const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
   id: '/parametres',
   path: '/parametres',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedEtiquettesRoute = AuthenticatedEtiquettesRouteImport.update({
+  id: '/etiquettes',
+  path: '/etiquettes',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedEmargementRoute = AuthenticatedEmargementRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/cartes': typeof AuthenticatedCartesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
+  '/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/cartes': typeof AuthenticatedCartesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
+  '/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/': typeof AuthenticatedIndexRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/_authenticated/cartes': typeof AuthenticatedCartesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/emargement': typeof AuthenticatedEmargementRoute
+  '/_authenticated/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/cartes'
     | '/dashboard'
     | '/emargement'
+    | '/etiquettes'
     | '/parametres'
     | '/trombinoscope'
     | '/etudiants/$id'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/cartes'
     | '/dashboard'
     | '/emargement'
+    | '/etiquettes'
     | '/parametres'
     | '/trombinoscope'
     | '/'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/_authenticated/cartes'
     | '/_authenticated/dashboard'
     | '/_authenticated/emargement'
+    | '/_authenticated/etiquettes'
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
     | '/_authenticated/'
@@ -207,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParametresRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/etiquettes': {
+      id: '/_authenticated/etiquettes'
+      path: '/etiquettes'
+      fullPath: '/etiquettes'
+      preLoaderRoute: typeof AuthenticatedEtiquettesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/emargement': {
       id: '/_authenticated/emargement'
       path: '/emargement'
@@ -249,6 +268,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCartesRoute: typeof AuthenticatedCartesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmargementRoute: typeof AuthenticatedEmargementRoute
+  AuthenticatedEtiquettesRoute: typeof AuthenticatedEtiquettesRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -260,6 +280,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCartesRoute: AuthenticatedCartesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmargementRoute: AuthenticatedEmargementRoute,
+  AuthenticatedEtiquettesRoute: AuthenticatedEtiquettesRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
