@@ -16,6 +16,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
 
@@ -38,7 +39,10 @@ function LoginPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: { full_name: fullName },
+          },
         });
         if (error) throw error;
         toast.success("Compte créé ! Vérifiez votre email pour confirmer.");
@@ -87,6 +91,18 @@ function LoginPage() {
                 autoComplete="email"
               />
             </div>
+            {mode === "signup" && (
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Nom complet</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  autoComplete="name"
+                />
+              </div>
+            )}
             {mode !== "reset" && (
               <div className="space-y-2">
                 <Label htmlFor="password">Mot de passe</Label>

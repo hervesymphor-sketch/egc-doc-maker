@@ -13,6 +13,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedUtilisateursRouteImport } from './routes/_authenticated/utilisateurs'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedEtiquettesRouteImport } from './routes/_authenticated/etiquettes'
@@ -41,6 +42,12 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedUtilisateursRoute =
+  AuthenticatedUtilisateursRouteImport.update({
+    id: '/utilisateurs',
+    path: '/utilisateurs',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedTrombinoscopeRoute =
   AuthenticatedTrombinoscopeRouteImport.update({
     id: '/trombinoscope',
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/utilisateurs': typeof AuthenticatedUtilisateursRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
   '/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
 }
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/utilisateurs': typeof AuthenticatedUtilisateursRoute
   '/': typeof AuthenticatedIndexRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
   '/etudiants': typeof AuthenticatedEtudiantsIndexRoute
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/etiquettes': typeof AuthenticatedEtiquettesRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/_authenticated/utilisateurs': typeof AuthenticatedUtilisateursRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
   '/_authenticated/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/etiquettes'
     | '/parametres'
     | '/trombinoscope'
+    | '/utilisateurs'
     | '/etudiants/$id'
     | '/etudiants/'
   fileRoutesByTo: FileRoutesByTo
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/etiquettes'
     | '/parametres'
     | '/trombinoscope'
+    | '/utilisateurs'
     | '/'
     | '/etudiants/$id'
     | '/etudiants'
@@ -164,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authenticated/etiquettes'
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
+    | '/_authenticated/utilisateurs'
     | '/_authenticated/'
     | '/_authenticated/etudiants/$id'
     | '/_authenticated/etudiants/'
@@ -203,6 +216,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/utilisateurs': {
+      id: '/_authenticated/utilisateurs'
+      path: '/utilisateurs'
+      fullPath: '/utilisateurs'
+      preLoaderRoute: typeof AuthenticatedUtilisateursRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/trombinoscope': {
@@ -271,6 +291,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedEtiquettesRoute: typeof AuthenticatedEtiquettesRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
+  AuthenticatedUtilisateursRoute: typeof AuthenticatedUtilisateursRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedEtudiantsIdRoute: typeof AuthenticatedEtudiantsIdRoute
   AuthenticatedEtudiantsIndexRoute: typeof AuthenticatedEtudiantsIndexRoute
@@ -283,6 +304,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedEtiquettesRoute: AuthenticatedEtiquettesRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
+  AuthenticatedUtilisateursRoute: AuthenticatedUtilisateursRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedEtudiantsIdRoute: AuthenticatedEtudiantsIdRoute,
   AuthenticatedEtudiantsIndexRoute: AuthenticatedEtudiantsIndexRoute,
