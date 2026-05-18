@@ -38,17 +38,17 @@ function rowToStudent(row: string[], promotion: Promotion, index: number): Stude
   return {
     id: `P${promotion}-${index + 1}`,
     promotion,
-    nom: cell(0),
-    prenom: cell(1),
+    prenom: cell(0),
+    nom: cell(1),
     dateNaissance: cell(2),
     lieuNaissance: cell(3),
-    sexe: cell(4),
-    adresse: cell(5),
-    ville: cell(6),
-    codePostal: cell(7),
-    email: cell(8),
-    telephone: cell(9),
-    photo: cell(10),
+    ine: cell(4),
+    numIdentification: cell(5),
+    numEtudiant: cell(6),
+    adresse: cell(7),
+    groupe: cell(8),
+    photo: cell(9),
+    anneeUniversitaire: cell(10),
   };
 }
 
