@@ -7,6 +7,7 @@ import {
   ClipboardList,
   CreditCard,
   Tag,
+  UserCog,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -31,6 +32,7 @@ const items = [
   { title: "Émargement", url: "/emargement", icon: ClipboardList },
   { title: "Cartes étudiants", url: "/cartes", icon: CreditCard },
   { title: "Étiquettes examen", url: "/etiquettes", icon: Tag },
+  { title: "Utilisateurs", url: "/utilisateurs", icon: UserCog },
   { title: "Paramètres", url: "/parametres", icon: Settings },
 ];
 
