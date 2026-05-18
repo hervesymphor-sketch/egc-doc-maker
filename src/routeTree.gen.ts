@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
+import { Route as AuthenticatedEmargementRouteImport } from './routes/_authenticated/emargement'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedEtudiantsIndexRouteImport } from './routes/_authenticated/etudiants.index'
 import { Route as AuthenticatedEtudiantsIdRouteImport } from './routes/_authenticated/etudiants.$id'
@@ -49,6 +50,11 @@ const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
   path: '/parametres',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedEmargementRoute = AuthenticatedEmargementRouteImport.update({
+  id: '/emargement',
+  path: '/emargement',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/emargement': typeof AuthenticatedEmargementRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/emargement': typeof AuthenticatedEmargementRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/': typeof AuthenticatedIndexRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/emargement': typeof AuthenticatedEmargementRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/dashboard'
+    | '/emargement'
     | '/parametres'
     | '/trombinoscope'
     | '/etudiants/$id'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/dashboard'
+    | '/emargement'
     | '/parametres'
     | '/trombinoscope'
     | '/'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/_authenticated/dashboard'
+    | '/_authenticated/emargement'
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
     | '/_authenticated/'
@@ -183,6 +195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParametresRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/emargement': {
+      id: '/_authenticated/emargement'
+      path: '/emargement'
+      fullPath: '/emargement'
+      preLoaderRoute: typeof AuthenticatedEmargementRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -209,6 +228,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEmargementRoute: typeof AuthenticatedEmargementRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -218,6 +238,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEmargementRoute: AuthenticatedEmargementRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
@@ -237,3 +258,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

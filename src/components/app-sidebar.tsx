@@ -4,6 +4,7 @@ import {
   Users,
   GraduationCap,
   Image as ImageIcon,
+  ClipboardList,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -25,6 +26,7 @@ const items = [
   { title: "Tableau de bord", url: "/dashboard", icon: LayoutDashboard },
   { title: "Étudiants", url: "/etudiants", icon: Users },
   { title: "Trombinoscope", url: "/trombinoscope", icon: ImageIcon },
+  { title: "Émargement", url: "/emargement", icon: ClipboardList },
   { title: "Paramètres", url: "/parametres", icon: Settings },
 ];
 
