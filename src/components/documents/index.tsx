@@ -150,8 +150,9 @@ export function ConventionStage({ student, settings }: Props) {
         <h2 className="font-bold text-base mb-2" style={{ color: "#6B21A8" }}>Le stagiaire :</h2>
         <p className="text-sm">
           {student.prenom} {student.nom}, né(e) le {student.dateNaissance} à {student.lieuNaissance},
-          demeurant {student.adresse}, {student.codePostal} {student.ville}.
-          Étudiant(e) en Promotion {student.promotion}.
+          demeurant {student.adresse}.
+          Étudiant(e) en Promotion {student.promotion}{student.groupe ? ` — Groupe ${student.groupe}` : ""}
+          {student.numEtudiant ? `, N° étudiant ${student.numEtudiant}` : ""}.
         </p>
       </section>
 
