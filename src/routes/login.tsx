@@ -91,6 +91,18 @@ function LoginPage() {
                 autoComplete="email"
               />
             </div>
+            {mode === "signup" && (
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Nom complet</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  autoComplete="name"
+                />
+              </div>
+            )}
             {mode !== "reset" && (
               <div className="space-y-2">
                 <Label htmlFor="password">Mot de passe</Label>
