@@ -1,0 +1,2 @@
+UPDATE public.school_settings SET google_sheet_id = '1J1Z75YwgoE7j1aUL8mGwNxdCoJu06W6p9Ybth_JuZ0Q', updated_at = now();
+ALTER TABLE public.school_settings ALTER COLUMN google_sheet_id SET DEFAULT '1J1Z75YwgoE7j1aUL8mGwNxdCoJu06W6p9Ybth_JuZ0Q';
