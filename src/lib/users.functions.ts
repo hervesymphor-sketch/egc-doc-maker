@@ -39,12 +39,14 @@ export const createUser = createServerFn({ method: "POST" })
       .from("profiles")
       .upsert({ id: newUserId, email: data.email, full_name: data.full_name });
 
-    // Set role (trigger inserts 'admin' by default — replace with chosen role)
+    // Reset roles. Trigger inserts 'admin' by default — remove if not admin.
     await supabaseAdmin.from("user_roles").delete().eq("user_id", newUserId);
-    const { error: roleInsertErr } = await supabaseAdmin
-      .from("user_roles")
-      .insert({ user_id: newUserId, role: data.role });
-    if (roleInsertErr) throw new Error(roleInsertErr.message);
+    if (data.is_admin) {
+      const { error: roleInsertErr } = await supabaseAdmin
+        .from("user_roles")
+        .insert({ user_id: newUserId, role: "admin" });
+      if (roleInsertErr) throw new Error(roleInsertErr.message);
+    }
 
     return { id: newUserId };
   });
