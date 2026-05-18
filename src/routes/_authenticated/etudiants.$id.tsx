@@ -6,10 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, FileText, IdCard, FileSignature, Award } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { CertificatScolarite } from "@/components/documents/CertificatScolarite";
-import { AttestationPresence } from "@/components/documents/AttestationPresence";
-import { CarteEtudiant } from "@/components/documents/CarteEtudiant";
-import { ConventionStage } from "@/components/documents/ConventionStage";
+import {
+  CertificatScolarite,
+  AttestationPresence,
+  CarteEtudiant,
+  ConventionStage,
+} from "@/components/documents";
 import { exportElementToPdf } from "@/lib/pdf";
 import { toast } from "sonner";
 
