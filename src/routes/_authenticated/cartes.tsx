@@ -25,9 +25,9 @@ function StudentCard({ student, settings }: { student: Student; settings: School
         height: "53.98mm",
         background: "linear-gradient(135deg, #6B21A8 0%, #4C1D95 100%)",
         color: "white",
-        padding: "4mm",
+        padding: "2.5mm",
         display: "flex",
-        gap: "4mm",
+        gap: "2.5mm",
       }}
     >
       {student.photo ? (
@@ -35,36 +35,54 @@ function StudentCard({ student, settings }: { student: Student; settings: School
           src={student.photo}
           alt=""
           className="rounded-md object-cover"
-          style={{ width: "30mm", height: "45mm" }}
+          style={{ width: "26mm", height: "42mm" }}
           crossOrigin="anonymous"
         />
       ) : (
         <div
           className="rounded-md bg-white/20 flex items-center justify-center text-3xl font-bold"
-          style={{ width: "30mm", height: "45mm" }}
+          style={{ width: "26mm", height: "42mm" }}
         >
           {student.prenom[0]}
           {student.nom[0]}
         </div>
       )}
-      <div className="flex-1 flex flex-col justify-between">
+      <div className="flex-1 flex flex-col justify-between" style={{ height: "42mm" }}>
         <div className="flex items-center justify-between">
           <img
             src={settings.logo_url || logoEgc}
             alt=""
-            className="h-5 object-contain brightness-0 invert"
+            className="h-4 object-contain brightness-0 invert"
             crossOrigin="anonymous"
           />
-          <div className="text-[7px] opacity-70">Carte étudiant</div>
+          <div className="text-[6px] opacity-70">Carte étudiant</div>
         </div>
         <div>
-          <div className="text-xs font-semibold leading-tight">{student.prenom}</div>
-          <div className="text-sm font-bold leading-tight">{student.nom.toUpperCase()}</div>
-          <div className="text-[8px] mt-1 opacity-80">Promotion {student.promotion}</div>
-          <div className="text-[7px] opacity-70">Né(e) le {student.dateNaissance}</div>
+          <div className="text-[10px] font-semibold leading-tight">{student.prenom}</div>
+          <div className="text-[11px] font-bold leading-tight">{student.nom.toUpperCase()}</div>
+          <div className="text-[7px] mt-0.5 opacity-80">Promotion {student.promotion}</div>
+          <div className="text-[6px] opacity-70">Né(e) le {student.dateNaissance}</div>
+          {student.ine && <div className="text-[6px] opacity-70">INE : {student.ine}</div>}
+          {student.numEtudiant && (
+            <div className="text-[6px] opacity-70">N° étudiant : {student.numEtudiant}</div>
+          )}
         </div>
-        <div className="text-[6px] opacity-50">
-          Année {new Date().getFullYear()}-{new Date().getFullYear() + 1}
+        <div className="space-y-0.5">
+          <div className="flex items-end justify-between">
+            <div className="text-[5px] opacity-50">
+              Année {new Date().getFullYear()}-{new Date().getFullYear() + 1}
+            </div>
+            <div
+              className="text-[5px] opacity-50 border-t border-white/30 text-center"
+              style={{ width: "16mm" }}
+            >
+              Signature
+            </div>
+          </div>
+          <div className="text-[5px] text-center leading-tight">
+            <div className="font-bold">Ecole de Gestion et de Commerce</div>
+            <div>Skillfor Campus - Rue A.Edmond 97233 SCHOELCHER</div>
+          </div>
         </div>
       </div>
     </div>
