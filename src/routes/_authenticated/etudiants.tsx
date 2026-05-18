@@ -22,6 +22,12 @@ function StudentsPage() {
   const students = useStudents(settings.data?.settings?.google_sheet_id);
   const [promo, setPromo] = useState<"all" | "1" | "2" | "3">("all");
   const [query, setQuery] = useState("");
+  const bulkRef = useRef<HTMLDivElement>(null);
+  const [bulk, setBulk] = useState<{ active: boolean; done: number; total: number }>({
+    active: false,
+    done: 0,
+    total: 0,
+  });
 
   const filtered = useMemo(() => {
     let list = students.data?.students ?? [];
