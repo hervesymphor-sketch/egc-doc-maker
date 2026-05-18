@@ -19,6 +19,7 @@ import { Route as AuthenticatedParametresRouteImport } from './routes/_authentic
 import { Route as AuthenticatedEtiquettesRouteImport } from './routes/_authenticated/etiquettes'
 import { Route as AuthenticatedEmargementRouteImport } from './routes/_authenticated/emargement'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCertificatsRouteImport } from './routes/_authenticated/certificats'
 import { Route as AuthenticatedCartesRouteImport } from './routes/_authenticated/cartes'
 import { Route as AuthenticatedEtudiantsIndexRouteImport } from './routes/_authenticated/etudiants.index'
 import { Route as AuthenticatedEtudiantsIdRouteImport } from './routes/_authenticated/etudiants.$id'
@@ -74,6 +75,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCertificatsRoute =
+  AuthenticatedCertificatsRouteImport.update({
+    id: '/certificats',
+    path: '/certificats',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedCartesRoute = AuthenticatedCartesRouteImport.update({
   id: '/cartes',
   path: '/cartes',
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/cartes': typeof AuthenticatedCartesRoute
+  '/certificats': typeof AuthenticatedCertificatsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
   '/etiquettes': typeof AuthenticatedEtiquettesRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/cartes': typeof AuthenticatedCartesRoute
+  '/certificats': typeof AuthenticatedCertificatsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/emargement': typeof AuthenticatedEmargementRoute
   '/etiquettes': typeof AuthenticatedEtiquettesRoute
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/cartes': typeof AuthenticatedCartesRoute
+  '/_authenticated/certificats': typeof AuthenticatedCertificatsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/emargement': typeof AuthenticatedEmargementRoute
   '/_authenticated/etiquettes': typeof AuthenticatedEtiquettesRoute
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/cartes'
+    | '/certificats'
     | '/dashboard'
     | '/emargement'
     | '/etiquettes'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/cartes'
+    | '/certificats'
     | '/dashboard'
     | '/emargement'
     | '/etiquettes'
@@ -171,6 +183,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/_authenticated/cartes'
+    | '/_authenticated/certificats'
     | '/_authenticated/dashboard'
     | '/_authenticated/emargement'
     | '/_authenticated/etiquettes'
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/certificats': {
+      id: '/_authenticated/certificats'
+      path: '/certificats'
+      fullPath: '/certificats'
+      preLoaderRoute: typeof AuthenticatedCertificatsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/cartes': {
       id: '/_authenticated/cartes'
       path: '/cartes'
@@ -286,6 +306,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedCartesRoute: typeof AuthenticatedCartesRoute
+  AuthenticatedCertificatsRoute: typeof AuthenticatedCertificatsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmargementRoute: typeof AuthenticatedEmargementRoute
   AuthenticatedEtiquettesRoute: typeof AuthenticatedEtiquettesRoute
@@ -299,6 +320,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCartesRoute: AuthenticatedCartesRoute,
+  AuthenticatedCertificatsRoute: AuthenticatedCertificatsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmargementRoute: AuthenticatedEmargementRoute,
   AuthenticatedEtiquettesRoute: AuthenticatedEtiquettesRoute,
@@ -322,3 +344,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
