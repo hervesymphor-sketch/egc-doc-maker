@@ -40,7 +40,7 @@ function DocFooter({ settings }: { settings: SchoolSettings }) {
 export function CertificatScolarite({ student, settings }: Props) {
   return (
     <div className="doc-a4">
-      <DocHeader settings={settings} />
+      <DocHeader settings={settings} showAddress={false} />
       <h1 className="text-3xl text-center font-bold mb-2" style={{ color: "#6B21A8" }}>
         CERTIFICAT DE SCOLARITÉ
       </h1>
