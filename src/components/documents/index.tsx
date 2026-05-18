@@ -103,9 +103,9 @@ export function CarteEtudiant({ student, settings }: Props) {
           </div>
         )}
         <div className="flex-1 flex flex-col justify-between">
-          <div>
-            <div className="text-[8px] uppercase tracking-wider opacity-70">{settings.name}</div>
-            <div className="text-[7px] opacity-60">Carte étudiant</div>
+          <div className="flex items-center justify-between">
+            <img src={settings.logo_url || logoEgc} alt="" className="h-5 object-contain brightness-0 invert" crossOrigin="anonymous" />
+            <div className="text-[7px] opacity-70">Carte étudiant</div>
           </div>
           <div>
             <div className="text-xs font-semibold leading-tight">{student.prenom}</div>
