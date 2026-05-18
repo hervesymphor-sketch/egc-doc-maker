@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedEtudiantsRouteImport } from './routes/_authenticated/etudiants'
@@ -33,10 +33,10 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedTrombinoscopeRoute =
   AuthenticatedTrombinoscopeRouteImport.update({
@@ -67,7 +67,7 @@ const AuthenticatedEtudiantsIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -77,18 +77,17 @@ export interface FileRoutesByFullPath {
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/': typeof AuthenticatedIndexRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -96,6 +95,7 @@ export interface FileRoutesById {
   '/_authenticated/etudiants': typeof AuthenticatedEtudiantsRouteWithChildren
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
 }
 export interface FileRouteTypes {
@@ -111,17 +111,16 @@ export interface FileRouteTypes {
     | '/etudiants/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/login'
     | '/reset-password'
     | '/dashboard'
     | '/etudiants'
     | '/parametres'
     | '/trombinoscope'
+    | '/'
     | '/etudiants/$id'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
     | '/login'
     | '/reset-password'
@@ -129,11 +128,11 @@ export interface FileRouteTypes {
     | '/_authenticated/etudiants'
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
+    | '/_authenticated/'
     | '/_authenticated/etudiants/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -162,12 +161,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/trombinoscope': {
       id: '/_authenticated/trombinoscope'
@@ -226,6 +225,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedEtudiantsRoute: typeof AuthenticatedEtudiantsRouteWithChildren
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -233,6 +233,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedEtudiantsRoute: AuthenticatedEtudiantsRouteWithChildren,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -240,7 +241,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -248,3 +248,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
