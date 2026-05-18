@@ -19,12 +19,12 @@ export interface Student {
 export interface SchoolSettings {
   id: string;
   name: string;
-  rne: string;
-  address: string;
-  city: string;
-  postal_code: string;
-  signatory_name: string;
-  signatory_title: string;
-  logo_url: string;
-  google_sheet_id: string;
+  rne: string | null;
+  address: string | null;
+  city: string | null;
+  postal_code: string | null;
+  signatory_name: string | null;
+  signatory_title: string | null;
+  logo_url: string | null;
+  google_sheet_id: string | null;
 }
