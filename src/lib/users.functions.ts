@@ -7,7 +7,7 @@ const createUserInput = z.object({
   email: z.string().email().max(255),
   password: z.string().min(6).max(128),
   full_name: z.string().min(1).max(255),
-  role: z.enum(["admin", "user"]),
+  is_admin: z.boolean(),
 });
 
 export const createUser = createServerFn({ method: "POST" })
