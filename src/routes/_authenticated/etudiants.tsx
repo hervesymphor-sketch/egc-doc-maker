@@ -162,6 +162,21 @@ function StudentsPage() {
           </TableBody>
         </Table>
       </Card>
+
+      {/* Off-screen render for bulk PDF generation */}
+      {bulk.active && settings.data?.settings && (
+        <div
+          ref={bulkRef}
+          style={{ position: "fixed", left: "-10000px", top: 0, zIndex: -1 }}
+          aria-hidden
+        >
+          {filtered.map((s) => (
+            <div key={s.id} data-cert>
+              <CertificatScolarite student={s} settings={settings.data!.settings!} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
