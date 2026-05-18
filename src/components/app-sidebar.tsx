@@ -32,6 +32,7 @@ const items = [
   { title: "Trombinoscope", url: "/trombinoscope", icon: ImageIcon },
   { title: "Émargement", url: "/emargement", icon: ClipboardList },
   { title: "Cartes étudiants", url: "/cartes", icon: CreditCard },
+  { title: "Certificats scolarité", url: "/certificats", icon: FileText },
   { title: "Étiquettes examen", url: "/etiquettes", icon: Tag },
   { title: "Utilisateurs", url: "/utilisateurs", icon: UserCog },
   { title: "Paramètres", url: "/parametres", icon: Settings },
