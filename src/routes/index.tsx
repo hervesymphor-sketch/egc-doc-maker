@@ -27,10 +27,7 @@ function HomePage() {
             <span className="font-serif text-lg text-primary font-semibold">EGC Docs</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Se connecter
-            </Link>
-            <Link to="/login">
+            <Link to="/dashboard">
               <Button size="sm">Commencer</Button>
             </Link>
           </div>
@@ -55,15 +52,15 @@ function HomePage() {
               et la centralisation des documents administratifs.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/login">
+              <Link to="/dashboard">
                 <Button size="lg" className="gap-2">
                   Accéder à l'application
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link to="/login">
+              <Link to="/etudiants">
                 <Button variant="outline" size="lg">
-                  Créer un compte
+                  Voir les étudiants
                 </Button>
               </Link>
             </div>
@@ -94,11 +91,11 @@ function HomePage() {
               title="Documents administratifs"
               description="Attestations de scolarité, conventions de stage et autres documents officiels."
             />
-            <FeatureCard
-              icon={Shield}
-              title="Sécurisé"
-              description="Authentification par email sécurisée. Vos données sont protégées."
-            />
+              <FeatureCard
+                icon={Shield}
+                title="Accès direct"
+                description="L'application est disponible immédiatement, sans écran de connexion."
+              />
             <FeatureCard
               icon={Sparkles}
               title="Interface intuitive"
@@ -123,9 +120,9 @@ function HomePage() {
             Rejoignez l'École de Gestion et de Commerce et commencez à utiliser EGC Docs dès aujourd'hui.
           </p>
           <div className="mt-8">
-            <Link to="/login">
+            <Link to="/dashboard">
               <Button size="lg" className="gap-2">
-                Se connecter
+                Ouvrir l'application
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
