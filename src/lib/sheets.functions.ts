@@ -11,6 +11,63 @@ const SHEET_TAB: Record<Promotion, string> = {
   "3": "Promotion 3",
 };
 
+async function getGoogleAccessToken() {
+  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY;
+  if (!clientEmail || !rawPrivateKey) return null;
+
+  const privateKey = rawPrivateKey.replace(/\\n/g, "\n");
+  const now = Math.floor(Date.now() / 1000);
+  const encoder = new TextEncoder();
+  const toBase64Url = (input: string | ArrayBuffer) =>
+    Buffer.from(input instanceof ArrayBuffer ? new Uint8Array(input) : input)
+      .toString("base64")
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+
+  const pem = privateKey
+    .replace("-----BEGIN PRIVATE KEY-----", "")
+    .replace("-----END PRIVATE KEY-----", "")
+    .replace(/\s/g, "");
+  const keyData = Uint8Array.from(Buffer.from(pem, "base64"));
+  const cryptoKey = await crypto.subtle.importKey(
+    "pkcs8",
+    keyData,
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const header = toBase64Url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
+  const payload = toBase64Url(
+    JSON.stringify({
+      iss: clientEmail,
+      scope: "https://www.googleapis.com/auth/spreadsheets.readonly",
+      aud: "https://oauth2.googleapis.com/token",
+      exp: now + 3600,
+      iat: now,
+    }),
+  );
+  const unsignedToken = `${header}.${payload}`;
+  const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", cryptoKey, encoder.encode(unsignedToken));
+  const assertion = `${unsignedToken}.${toBase64Url(signature)}`;
+
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion,
+    }),
+  });
+  const token = await res.json();
+  if (!res.ok) {
+    throw new Error(`Google service account error [${res.status}]: ${JSON.stringify(token).slice(0, 300)}`);
+  }
+  return token.access_token as string;
+}
+
 async function fetchSheetValues(spreadsheetId: string, range: string) {
   const gatewayApiKey = process.env.GOOGLE_SHEETS_API_KEY;
   const lovableApiKey = process.env.LOVABLE_API_KEY;
@@ -29,6 +86,19 @@ async function fetchSheetValues(spreadsheetId: string, range: string) {
     if (!res.ok) {
       throw new Error(
         `Google Sheets connector error [${res.status}]: ${JSON.stringify(data).slice(0, 300)}`,
+      );
+    }
+    return data as { values?: string[][] };
+  }
+
+  const accessToken = await getGoogleAccessToken();
+  if (accessToken) {
+    const url = `${SHEETS_API_URL}/spreadsheets/${spreadsheetId}/values/${rangePath}`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(
+        `Google Sheets service account error [${res.status}]: ${JSON.stringify(data).slice(0, 300)}`,
       );
     }
     return data as { values?: string[][] };
