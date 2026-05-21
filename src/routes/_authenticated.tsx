@@ -12,22 +12,33 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthenticatedLayout() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) {
-        navigate({ to: "/login" });
-      } else {
-        setReady(true);
-      }
-    });
+    let mounted = true;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (!mounted) return;
+      setHasSession(!!s);
+      setReady(true);
       if (!s) navigate({ to: "/login" });
     });
-    return () => subscription.unsubscribe();
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      setHasSession(!!data.session);
+      setReady(true);
+      if (!data.session) navigate({ to: "/login" });
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
-  if (!ready) {
+  if (!ready || !hasSession) {
+
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
