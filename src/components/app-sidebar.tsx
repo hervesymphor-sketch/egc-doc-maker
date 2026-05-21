@@ -10,7 +10,6 @@ import {
   Tag,
   UserCog,
   Settings,
-  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -24,7 +23,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { supabase } from "@/integrations/supabase/client";
 
 const items = [
   { title: "Tableau de bord", url: "/dashboard", icon: LayoutDashboard },
@@ -76,19 +74,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={() => supabase.auth.signOut()}
-              tooltip="Déconnexion"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Déconnexion</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      <SidebarFooter className="border-t border-sidebar-border" />
     </Sidebar>
   );
 }
