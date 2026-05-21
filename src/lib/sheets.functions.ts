@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { Student, Promotion } from "./types";
 
 const SHEETS_API_URL = "https://sheets.googleapis.com/v4";
+const SHEETS_GATEWAY_URL = "https://connector-gateway.lovable.dev/google_sheets/v4";
 
 const SHEET_TAB: Record<Promotion, string> = {
   "1": "Promotion 1",
@@ -11,10 +12,31 @@ const SHEET_TAB: Record<Promotion, string> = {
 };
 
 async function fetchSheetValues(spreadsheetId: string, range: string) {
-  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-  if (!GOOGLE_API_KEY) throw new Error("GOOGLE_API_KEY missing");
+  const gatewayApiKey = process.env.GOOGLE_SHEETS_API_KEY;
+  const lovableApiKey = process.env.LOVABLE_API_KEY;
+  const googleApiKey = process.env.GOOGLE_API_KEY;
+  const rangePath = range.replaceAll(" ", "%20");
 
-  const url = `${SHEETS_API_URL}/spreadsheets/${spreadsheetId}/values/${range}?key=${GOOGLE_API_KEY}`;
+  if (gatewayApiKey && lovableApiKey) {
+    const gatewayUrl = `${SHEETS_GATEWAY_URL}/spreadsheets/${spreadsheetId}/values/${rangePath}`;
+    const res = await fetch(gatewayUrl, {
+      headers: {
+        Authorization: `Bearer ${lovableApiKey}`,
+        "X-Connection-Api-Key": gatewayApiKey,
+      },
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(
+        `Google Sheets connector error [${res.status}]: ${JSON.stringify(data).slice(0, 300)}`,
+      );
+    }
+    return data as { values?: string[][] };
+  }
+
+  if (!googleApiKey) throw new Error("Google Sheets connection missing");
+
+  const url = `${SHEETS_API_URL}/spreadsheets/${spreadsheetId}/values/${rangePath}?key=${googleApiKey}`;
   const res = await fetch(url);
   const data = await res.json();
   if (!res.ok) {
