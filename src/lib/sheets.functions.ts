@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import type { Student, Promotion } from "./types";
 
@@ -53,7 +52,6 @@ function rowToStudent(row: string[], promotion: Promotion, index: number): Stude
 }
 
 export const getStudents = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
       .object({
