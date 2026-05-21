@@ -67,7 +67,7 @@ function HomePage() {
                 </Button>
               </Link>
             </div>
-          </d iv>
+          </div>
         </div>
       </section>
 
