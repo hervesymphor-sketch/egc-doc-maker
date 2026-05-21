@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUtilisateursRouteImport } from './routes/_authenticated/utilisateurs'
 import { Route as AuthenticatedTrombinoscopeRouteImport } from './routes/_authenticated/trombinoscope'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
@@ -38,10 +38,10 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedUtilisateursRoute =
   AuthenticatedUtilisateursRouteImport.update({
@@ -100,7 +100,7 @@ const AuthenticatedEtudiantsIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedIndexRoute
+  '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/cartes': typeof AuthenticatedCartesRoute
@@ -115,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/cartes': typeof AuthenticatedCartesRoute
@@ -125,12 +126,12 @@ export interface FileRoutesByTo {
   '/parametres': typeof AuthenticatedParametresRoute
   '/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/utilisateurs': typeof AuthenticatedUtilisateursRoute
-  '/': typeof AuthenticatedIndexRoute
   '/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
   '/etudiants': typeof AuthenticatedEtudiantsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -142,7 +143,6 @@ export interface FileRoutesById {
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/trombinoscope': typeof AuthenticatedTrombinoscopeRoute
   '/_authenticated/utilisateurs': typeof AuthenticatedUtilisateursRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/etudiants/$id': typeof AuthenticatedEtudiantsIdRoute
   '/_authenticated/etudiants/': typeof AuthenticatedEtudiantsIndexRoute
 }
@@ -164,6 +164,7 @@ export interface FileRouteTypes {
     | '/etudiants/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/login'
     | '/reset-password'
     | '/cartes'
@@ -174,11 +175,11 @@ export interface FileRouteTypes {
     | '/parametres'
     | '/trombinoscope'
     | '/utilisateurs'
-    | '/'
     | '/etudiants/$id'
     | '/etudiants'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/login'
     | '/reset-password'
@@ -190,12 +191,12 @@ export interface FileRouteTypes {
     | '/_authenticated/parametres'
     | '/_authenticated/trombinoscope'
     | '/_authenticated/utilisateurs'
-    | '/_authenticated/'
     | '/_authenticated/etudiants/$id'
     | '/_authenticated/etudiants/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -224,12 +225,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
+    '/': {
+      id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/utilisateurs': {
       id: '/_authenticated/utilisateurs'
@@ -313,7 +314,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedTrombinoscopeRoute: typeof AuthenticatedTrombinoscopeRoute
   AuthenticatedUtilisateursRoute: typeof AuthenticatedUtilisateursRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedEtudiantsIdRoute: typeof AuthenticatedEtudiantsIdRoute
   AuthenticatedEtudiantsIndexRoute: typeof AuthenticatedEtudiantsIndexRoute
 }
@@ -327,7 +327,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedTrombinoscopeRoute: AuthenticatedTrombinoscopeRoute,
   AuthenticatedUtilisateursRoute: AuthenticatedUtilisateursRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedEtudiantsIdRoute: AuthenticatedEtudiantsIdRoute,
   AuthenticatedEtudiantsIndexRoute: AuthenticatedEtudiantsIndexRoute,
 }
@@ -337,6 +336,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
