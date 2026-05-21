@@ -2,9 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSchoolSettings, useStudents } from "@/hooks/use-data";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Download } from "lucide-react";
+import { AlertTriangle, Download } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { exportElementToPdf } from "@/lib/pdf";
 import { toast } from "sonner";
@@ -59,6 +60,18 @@ function TromboPage() {
           </Button>
         </div>
       </div>
+
+      {students.data?.errors && students.data.errors.length > 0 && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Impossible de charger Google Sheets</AlertTitle>
+          <AlertDescription>
+            {students.data.errors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </AlertDescription>
+        </Alert>
+      )}
 
       <Card className="p-6 overflow-auto">
         <div ref={ref} className="doc-a4 mx-auto" style={{ padding: "15mm" }}>
