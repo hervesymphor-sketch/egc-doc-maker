@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { Student, Promotion } from "./types";
 
-const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_sheets/v4";
+const SHEETS_API_URL = "https://sheets.googleapis.com/v4";
 
 const SHEET_TAB: Record<Promotion, string> = {
   "1": "Promotion 1",
@@ -11,18 +11,11 @@ const SHEET_TAB: Record<Promotion, string> = {
 };
 
 async function fetchSheetValues(spreadsheetId: string, range: string) {
-  const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-  const GOOGLE_SHEETS_API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
-  if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
-  if (!GOOGLE_SHEETS_API_KEY) throw new Error("GOOGLE_SHEETS_API_KEY missing");
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+  if (!GOOGLE_API_KEY) throw new Error("GOOGLE_API_KEY missing");
 
-  const url = `${GATEWAY_URL}/spreadsheets/${spreadsheetId}/values/${range}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "X-Connection-Api-Key": GOOGLE_SHEETS_API_KEY,
-    },
-  });
+  const url = `${SHEETS_API_URL}/spreadsheets/${spreadsheetId}/values/${range}?key=${GOOGLE_API_KEY}`;
+  const res = await fetch(url);
   const data = await res.json();
   if (!res.ok) {
     throw new Error(
