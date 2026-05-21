@@ -1,12 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 
 export const getSchoolSettings = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { supabase } = context;
-    const { data, error } = await supabase
+  .handler(async () => {
+    const { data, error } = await supabaseAdmin
       .from("school_settings")
       .select("*")
       .limit(1)
@@ -16,7 +14,6 @@ export const getSchoolSettings = createServerFn({ method: "GET" })
   });
 
 export const updateSchoolSettings = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
       .object({
@@ -33,10 +30,9 @@ export const updateSchoolSettings = createServerFn({ method: "POST" })
       })
       .parse(input),
   )
-  .handler(async ({ data, context }) => {
-    const { supabase } = context;
+  .handler(async ({ data }) => {
     const { id, ...patch } = data;
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("school_settings")
       .update({ ...patch, updated_at: new Date().toISOString() })
       .eq("id", id);
