@@ -10,6 +10,9 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
 export default defineConfig({
   vite: {
+    resolve: {
+      dedupe: ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-query"],
+    },
     server: {
       allowedHosts: true,
     },
