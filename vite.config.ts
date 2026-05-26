@@ -10,6 +10,11 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
 export default defineConfig({
   vite: {
+    define: {
+      // TanStack Start builds this URL at compile time via its plugin, but on Railway
+      // the polyfill (window.process={env:{}}) shadows it. Force the correct base path.
+      "process.env.TSS_SERVER_FN_BASE": JSON.stringify("/_serverFn/"),
+    },
     resolve: {
       dedupe: ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-query"],
     },
